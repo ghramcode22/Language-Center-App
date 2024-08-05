@@ -1,16 +1,16 @@
 package Geeks.languagecenterapp.Model;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
-@Table(name = "chatRoom")
+@Table(name = "chat_room")
 @AllArgsConstructor
 @NoArgsConstructor
 @Data
@@ -19,15 +19,22 @@ public class ChatRoomEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @JsonIgnore
-    @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "userId", nullable = true)
-    private  UserEntity user;
+    private String name;
+
+    @ManyToMany
+    @JoinTable(
+            name = "chat_room_users",
+            joinColumns = @JoinColumn(name = "chat_room_id"),
+            inverseJoinColumns = @JoinColumn(name = "user_id")
+    )
+    private List<UserEntity> users;
+
+    @OneToMany(mappedBy = "chatRoom", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<MessageEntity> messages;
+
 
     @JsonFormat(pattern = "yyyy-MM-dd")
     private LocalDateTime CreatedAt;
-
-    private String name ;
-
 }
+
 

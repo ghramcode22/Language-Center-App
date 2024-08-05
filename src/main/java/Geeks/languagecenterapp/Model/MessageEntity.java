@@ -6,10 +6,8 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import lombok.Value;
 
 import java.time.LocalDateTime;
-import java.util.Date;
 
 @Entity
 @Table(name = "message")
@@ -23,14 +21,13 @@ public class MessageEntity {
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "userId", nullable = true)
+    @JoinColumn(name = "user_id", nullable = true)
     private UserEntity user;
 
     @JsonIgnore
     @ManyToOne(fetch = FetchType.LAZY, optional = true)
-    @JoinColumn(name = "chatRoomId", nullable = true)
+    @JoinColumn(name = "chat_room_id", nullable = true)
     private ChatRoomEntity chatRoom;
-
 
     private String content;
 
@@ -38,5 +35,5 @@ public class MessageEntity {
     private LocalDateTime date;
 
     @Column(columnDefinition = "boolean default false")
-    private Boolean isRaed;
+    private Boolean isRead;
 }
