@@ -427,6 +427,72 @@ public class CourseService {
 
     }
 
+    public ResponseEntity<?> uploadMarksFile(UploadMarksRequset data) {
+        //Check User Role
+        if (HandleCurrentUserSession.getCurrentUserRole().equals(UserAccountEnum.ADMIN)) {
+            MultipartFile marks = data.getMarksFile();
+
+            if (marks.isEmpty()) {
+                return new ResponseEntity<>("Please upload a marks!", HttpStatus.BAD_REQUEST);
+            }
+
+            if (courseRepository.findById(data.getCourseId()).isEmpty()) {
+                return new ResponseEntity<>("Course With this Id Not Found", HttpStatus.BAD_REQUEST);
+            }
+
+            if (!Objects.requireNonNull(Objects.requireNonNull(marks).getOriginalFilename()).endsWith(".xlsx")) {
+                return new ResponseEntity<>("Please upload an Excel File!", HttpStatus.BAD_REQUEST);
+            }
+
+            List<String[]> result = MarkService.handleExcelFile(marks);
+            if (result.isEmpty()) {
+                return new ResponseEntity<>("Failed to process the file", HttpStatus.INTERNAL_SERVER_ERROR);
+            }
+
+            // Upload File To Server
+            String resultPath = FilesManagement.uploadSingleFile(marks);
+            if (resultPath != null) {
+                // Initialize Mark Object
+                MarkEntity markEntity = new MarkEntity();
+                markEntity.setUser(HandleCurrentUserSession.getCurrentUser());
+                markEntity.setCourse(CourseEntity.builder().id(data.getCourseId()).build());
+                markEntity.setFile(resultPath);
+                markEntity.setDate(data.getUploadDate());
+                // Save File In DataBase
+                markRepository.save(markEntity);
+                return new ResponseEntity<>("Marks Successfully Uploaded", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Something Went Wrong .. try again later", HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            return new ResponseEntity<>("Only Admins Can Upload Marks", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    public ResponseEntity<?> getUserMarks(GetStudentMarksRequest data) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserEntity user = (UserEntity) authentication.getPrincipal();
+        Enum<UserAccountEnum> role = user.getAccountType();
+
+        if (data.getPhone() == null) {
+            return new ResponseEntity<>("phone must not be Null", HttpStatus.BAD_REQUEST);
+        } else if (role.equals(UserAccountEnum.USER)) {
+            if (userRepository.findByPhoneNumber(data.getPhone()).isPresent()) {
+                if (markRepository.findFilesByCourseId(data.getCourseId()).isPresent()) {
+                    String markFilePath = markRepository.findFilesByCourseId(data.getCourseId()).get();
+                    List<String[]> markFile = MarkService.handleExcelFile(MarkService.convertFileToMultipartFile(markFilePath));
+                    List<String[]> result = MarkService.searchInExcelFile(markFile, data.getPhone());
+                    return new ResponseEntity<>(result, HttpStatus.OK);
+                } else {
+                    return new ResponseEntity<>("Course With this Id Not Found Or Mark File Not Uploaded Yet", HttpStatus.BAD_REQUEST);
+                }
+            } else {
+                return new ResponseEntity<>("Student With this Phone Not Found", HttpStatus.BAD_REQUEST);
+            }
+        } else {
+            return new ResponseEntity<>("Get Marks Only For Students", HttpStatus.BAD_REQUEST);
+        }
+    }
 
     public ResponseEntity<?> addDiscount(DiscountRequest body ,int id) {
         Map <String,String> response = new HashMap<>();
