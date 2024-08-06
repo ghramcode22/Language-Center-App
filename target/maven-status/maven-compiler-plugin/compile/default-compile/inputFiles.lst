@@ -19,12 +19,14 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Controller/QuizController.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Response/CourseResponse.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/QuestionRequest.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/GetStudentMarksRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/QuizRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/PlacementTestEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/EnrollCourseEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/QuizRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Response/PostResponse.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/BookRepository.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/UploadMarksRequset.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/AttendanceRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/Enum/ImageEnum.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/UserRoleRepository.java
@@ -57,6 +59,7 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Response/QuizResponse.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/LoginRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/ServiceRepository.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Service/MarkService.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/RolePermissionRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/UserQuizResponseEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/PostEntity.java
@@ -106,5 +109,6 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/QuestionQuizRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Service/TokenService.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/QuizEntity.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Tools/HandleCurrentUserSession.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/ServiceEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Service/QuizService.java

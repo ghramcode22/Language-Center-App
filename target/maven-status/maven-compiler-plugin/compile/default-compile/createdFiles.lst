@@ -35,10 +35,12 @@ Geeks/languagecenterapp/DTO/Request/QuestionRequest.class
 Geeks/languagecenterapp/Repository/MessageRepository.class
 Geeks/languagecenterapp/Service/UserService.class
 Geeks/languagecenterapp/DTO/Request/AttendanceRequest.class
+Geeks/languagecenterapp/Model/CourseEntity$CourseEntityBuilder.class
 Geeks/languagecenterapp/Repository/ImageRepository.class
 Geeks/languagecenterapp/Service/PlacementTestService.class
 Geeks/languagecenterapp/Service/ServiceService.class
 Geeks/languagecenterapp/Model/TokenEntity.class
+Geeks/languagecenterapp/DTO/Request/UploadMarksRequset.class
 Geeks/languagecenterapp/Model/UserQuizResponseEntity.class
 Geeks/languagecenterapp/DTO/Response/CourseResponse.class
 Geeks/languagecenterapp/Model/CourseImageEntity.class
@@ -58,6 +60,7 @@ Geeks/languagecenterapp/DTO/Request/ServiceRequest.class
 Geeks/languagecenterapp/Repository/TokenRepository.class
 Geeks/languagecenterapp/Model/ServiceEntity.class
 Geeks/languagecenterapp/Service/SecurityServices/JWTService.class
+Geeks/languagecenterapp/Service/MarkService$1.class
 Geeks/languagecenterapp/Model/Enum/PostImageEnum.class
 Geeks/languagecenterapp/Controller/PostController.class
 Geeks/languagecenterapp/DTO/Request/PostRequest.class
@@ -73,12 +76,14 @@ Geeks/languagecenterapp/Repository/BookRepository.class
 Geeks/languagecenterapp/DTO/Response/Register_Login_Response.class
 Geeks/languagecenterapp/DTO/Response/QuizResponse.class
 Geeks/languagecenterapp/Controller/AuthController.class
+Geeks/languagecenterapp/Tools/HandleCurrentUserSession.class
 Geeks/languagecenterapp/Model/MessageEntity.class
 Geeks/languagecenterapp/Model/Enum/ImageEnum.class
 Geeks/languagecenterapp/Model/MarkEntity.class
 Geeks/languagecenterapp/CustomExceptions/HandleValidationException.class
 Geeks/languagecenterapp/Repository/UserQuizResponseRepository.class
 Geeks/languagecenterapp/Repository/UserQuizRepository.class
+Geeks/languagecenterapp/Service/UserService$1.class
 Geeks/languagecenterapp/Model/QuizEntity.class
 Geeks/languagecenterapp/Repository/DayRepository.class
 Geeks/languagecenterapp/Repository/HomeWorkRepository.class
@@ -95,6 +100,7 @@ Geeks/languagecenterapp/Model/DayEntity.class
 Geeks/languagecenterapp/Controller/CourseController.class
 Geeks/languagecenterapp/Controller/QuizController.class
 Geeks/languagecenterapp/Model/UserEntity$UserEntityBuilder.class
+Geeks/languagecenterapp/DTO/Request/GetStudentMarksRequest.class
 Geeks/languagecenterapp/DTO/Request/CourseRequest.class
 Geeks/languagecenterapp/Model/UserQuizEntity.class
 Geeks/languagecenterapp/Repository/AttendanceRepository.class
@@ -108,5 +114,6 @@ Geeks/languagecenterapp/DTO/Request/BookRequest.class
 Geeks/languagecenterapp/Repository/QuizQuestionRepository.class
 Geeks/languagecenterapp/Model/UserChatRoomEntity.class
 Geeks/languagecenterapp/Model/CourseDayEntity.class
+Geeks/languagecenterapp/Service/MarkService.class
 Geeks/languagecenterapp/Controller/PlacementTestController.class
 Geeks/languagecenterapp/LanguageCenterAppApplication.class
