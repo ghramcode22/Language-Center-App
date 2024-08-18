@@ -26,10 +26,12 @@ public class ChatService {
     public ChatRoomEntity createChatRoom(String name, List<Integer> users) {
         ChatRoomEntity chatRoom = new ChatRoomEntity();
         chatRoom.setName(name);
+        chatRoom.setCreatedAt(LocalDateTime.now());
         List<UserEntity> userEntities = userRepository.findAllById(users);
         chatRoom.setUsers(userEntities);
         return chatRoomRepository.save(chatRoom);
     }
+
 
     public MessageEntity sendMessage(int userId, int chatRoomId, String content) {
         UserEntity user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("User not found"));
