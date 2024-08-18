@@ -76,6 +76,7 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/NotificationEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/RoleRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Controller/PostController.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Confi/CorsConfig.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/UserChatRoomRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/ImageRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/MessageRepository.java

@@ -55,6 +55,7 @@ Geeks/languagecenterapp/Repository/RoleRepository.class
 Geeks/languagecenterapp/Model/RolePermissionEntity.class
 Geeks/languagecenterapp/Model/BookEntity.class
 Geeks/languagecenterapp/Security/SecurityConfig.class
+CorsConfig$1.class
 Geeks/languagecenterapp/Repository/UserRateRepository.class
 Geeks/languagecenterapp/DTO/Request/ServiceRequest.class
 Geeks/languagecenterapp/Repository/TokenRepository.class
@@ -89,6 +90,7 @@ Geeks/languagecenterapp/Repository/DayRepository.class
 Geeks/languagecenterapp/Repository/HomeWorkRepository.class
 Geeks/languagecenterapp/Model/QuestionEntity.class
 Geeks/languagecenterapp/Repository/ChatRoomRepository.class
+CorsConfig.class
 Geeks/languagecenterapp/Model/TokenEntity$TokenEntityBuilder.class
 Geeks/languagecenterapp/DTO/Request/RegisterRequest.class
 Geeks/languagecenterapp/Model/PlacementTestEntity.class
