@@ -11,7 +11,9 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/LanguageCenterAppApplication.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/PlacementTestRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/CourseRequest.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/UploadMarksRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Response/Register_Login_Response.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/config/CorsConfig.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/QuestionRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/ChatRoomEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Response/UserProfileResponse.java
@@ -26,7 +28,6 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/QuizRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Response/PostResponse.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/BookRepository.java
-/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/UploadMarksRequset.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/AttendanceRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/Enum/ImageEnum.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/UserRoleRepository.java
@@ -46,6 +47,7 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/CustomExceptions/HandleValidationException.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/FavoriteEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/UserQuizResponseRepository.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/PasswordResetRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Service/UserService.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Controller/AuthController.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/BookEntity.java
@@ -76,7 +78,6 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/NotificationEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/RoleRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Controller/PostController.java
-/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Confi/CorsConfig.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/UserChatRoomRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/ImageRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/MessageRepository.java
@@ -93,6 +94,7 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/TokenEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/DayRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/UserChatRoomEntity.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/UploadHomeworkRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/MessageEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/PermissionEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/RoleEntity.java
@@ -105,11 +107,13 @@
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Service/PlacementTestService.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/HomeWorkEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/Enum/UserAccountEnum.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Service/EmailService.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Service/SecurityServices/EncryptionService.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Repository/NotificationRepository.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/QuestionQuizRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Service/TokenService.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/QuizEntity.java
+/home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/DTO/Request/PasswordResetTokenRequest.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Tools/HandleCurrentUserSession.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Model/ServiceEntity.java
 /home/ghram/Documents/Github/Language-Center-App/src/main/java/Geeks/languagecenterapp/Service/QuizService.java

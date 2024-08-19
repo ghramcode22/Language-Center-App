@@ -15,8 +15,12 @@ Geeks/languagecenterapp/Repository/PostRepository.class
 Geeks/languagecenterapp/DTO/Request/QuestionQuizRequest.class
 Geeks/languagecenterapp/Model/HomeWorkEntity.class
 Geeks/languagecenterapp/Model/NotificationEntity.class
+Geeks/languagecenterapp/config/CorsConfig$1.class
+Geeks/languagecenterapp/config/CorsConfig.class
 Geeks/languagecenterapp/Repository/UserRoleRepository.class
 Geeks/languagecenterapp/Model/CourseEntity.class
+Geeks/languagecenterapp/Service/EmailService.class
+Geeks/languagecenterapp/DTO/Request/UploadHomeworkRequest.class
 Geeks/languagecenterapp/Service/PostService.class
 Geeks/languagecenterapp/Controller/UserController.class
 Geeks/languagecenterapp/Model/Enum/PostEnum.class
@@ -40,7 +44,6 @@ Geeks/languagecenterapp/Repository/ImageRepository.class
 Geeks/languagecenterapp/Service/PlacementTestService.class
 Geeks/languagecenterapp/Service/ServiceService.class
 Geeks/languagecenterapp/Model/TokenEntity.class
-Geeks/languagecenterapp/DTO/Request/UploadMarksRequset.class
 Geeks/languagecenterapp/Model/UserQuizResponseEntity.class
 Geeks/languagecenterapp/DTO/Response/CourseResponse.class
 Geeks/languagecenterapp/Model/CourseImageEntity.class
@@ -55,15 +58,14 @@ Geeks/languagecenterapp/Repository/RoleRepository.class
 Geeks/languagecenterapp/Model/RolePermissionEntity.class
 Geeks/languagecenterapp/Model/BookEntity.class
 Geeks/languagecenterapp/Security/SecurityConfig.class
-CorsConfig$1.class
 Geeks/languagecenterapp/Repository/UserRateRepository.class
 Geeks/languagecenterapp/DTO/Request/ServiceRequest.class
 Geeks/languagecenterapp/Repository/TokenRepository.class
 Geeks/languagecenterapp/Model/ServiceEntity.class
 Geeks/languagecenterapp/Service/SecurityServices/JWTService.class
-Geeks/languagecenterapp/Service/MarkService$1.class
 Geeks/languagecenterapp/Model/Enum/PostImageEnum.class
 Geeks/languagecenterapp/Controller/PostController.class
+Geeks/languagecenterapp/DTO/Request/PasswordResetTokenRequest.class
 Geeks/languagecenterapp/DTO/Request/PostRequest.class
 Geeks/languagecenterapp/DTO/Request/LoginRequest.class
 Geeks/languagecenterapp/Model/PostEntity.class
@@ -90,10 +92,10 @@ Geeks/languagecenterapp/Repository/DayRepository.class
 Geeks/languagecenterapp/Repository/HomeWorkRepository.class
 Geeks/languagecenterapp/Model/QuestionEntity.class
 Geeks/languagecenterapp/Repository/ChatRoomRepository.class
-CorsConfig.class
 Geeks/languagecenterapp/Model/TokenEntity$TokenEntityBuilder.class
 Geeks/languagecenterapp/DTO/Request/RegisterRequest.class
 Geeks/languagecenterapp/Model/PlacementTestEntity.class
+Geeks/languagecenterapp/DTO/Request/PasswordResetRequest.class
 Geeks/languagecenterapp/Repository/UserRepository.class
 Geeks/languagecenterapp/Tools/FilesManagement.class
 Geeks/languagecenterapp/Repository/RolePermissionRepository.class
@@ -108,6 +110,7 @@ Geeks/languagecenterapp/Model/UserQuizEntity.class
 Geeks/languagecenterapp/Repository/AttendanceRepository.class
 Geeks/languagecenterapp/Repository/QuizRepository.class
 Geeks/languagecenterapp/DTO/Response/ServiceWithCourseResponse.class
+Geeks/languagecenterapp/DTO/Request/UploadMarksRequest.class
 Geeks/languagecenterapp/DTO/Request/DiscountRequest.class
 Geeks/languagecenterapp/CustomExceptions/CustomException.class
 Geeks/languagecenterapp/DTO/Response/CourseDayResponse.class

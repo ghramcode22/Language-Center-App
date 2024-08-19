@@ -1,10 +1,9 @@
 package Geeks.languagecenterapp.Service;
 
 import Geeks.languagecenterapp.CustomExceptions.CustomException;
-import Geeks.languagecenterapp.DTO.Request.EnrollRequest;
-import Geeks.languagecenterapp.DTO.Request.LoginRequest;
-import Geeks.languagecenterapp.DTO.Request.RateRequest;
-import Geeks.languagecenterapp.DTO.Request.RegisterRequest;
+import Geeks.languagecenterapp.DTO.Request.*;
+import Geeks.languagecenterapp.DTO.Response.CourseDayResponse;
+import Geeks.languagecenterapp.DTO.Response.CourseResponse;
 import Geeks.languagecenterapp.DTO.Response.Register_Login_Response;
 import Geeks.languagecenterapp.DTO.Response.UserProfileResponse;
 import Geeks.languagecenterapp.Model.*;
@@ -28,40 +27,46 @@ import org.springframework.security.web.authentication.logout.SecurityContextLog
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.security.SecureRandom;
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
-@AllArgsConstructor
 public class UserService {
 
     @Autowired
-    private final UserRepository userRepository;
+    private  UserRepository userRepository;
 
     @Autowired
-    private final ImageRepository imageRepository;
+    private  ImageRepository imageRepository;
 
     @Autowired
-    private final CourseRepository courseRepository;
+    private  CourseRepository courseRepository;
 
     @Autowired
-    private final EncryptionService encryptionService;
+    private  EncryptionService encryptionService;
 
     @Autowired
-    private final JWTService jwtService;
+    private  JWTService jwtService;
 
     @Autowired
-    private final TokenService tokenService;
+    private  TokenService tokenService;
 
     @Autowired
-    private final EnrollCourseRepository enrollCourseRepository;
+    private  EnrollCourseRepository enrollCourseRepository;
 
     @Autowired
-    private final FavoriteRepository favoriteRepository;
+    private  FavoriteRepository favoriteRepository;
 
     @Autowired
-    private final UserRateRepository userRateRepository;
+    private  UserRateRepository userRateRepository;
 
+    @Autowired
+    private  CourseImageRepository courseImageRepository;
+
+    @Autowired
+    private EmailService emailService;
 
     public Register_Login_Response registerUser(RegisterRequest registerRequest) throws CustomException {
         if (userRepository.findByEmail(registerRequest.getEmail()).isPresent() || userRepository.findByPhoneNumber(registerRequest.getPhone()).isPresent()) {
@@ -147,6 +152,7 @@ public class UserService {
     private Register_Login_Response initializeResponseObject(UserEntity user, String token) {
         Register_Login_Response response = new Register_Login_Response();
         response.setMessage("Successfully Operation");
+        response.setId(user.getId());
         response.setFirstName(user.getFirstName());
         response.setLastName(user.getLastName());
         response.setEmail(user.getEmail());
@@ -179,23 +185,54 @@ public class UserService {
         return userRepository.findByAccountType(accountType);
     }
 
-    public List<CourseEntity> getEnrolledCourses(UserEntity user) {
+    public List<CourseResponse> getEnrolledCourses(UserEntity user) {
         List<EnrollCourseEntity> enrollments = enrollCourseRepository.findByUser(user);
         List<CourseEntity> courses = new ArrayList<>();
         for (EnrollCourseEntity enrollment : enrollments) {
             courses.add(enrollment.getCourse());
         }
-        return courses;
+        return courses.stream().map(this::convertToDTO).collect(Collectors.toList());
+    }
+    // Convert CourseEntity to CourseDTO
+    private CourseResponse convertToDTO(CourseEntity course) {
+        CourseResponse dto = new CourseResponse();
+        dto.setId(course.getId());
+        dto.setTitle(course.getTitle());
+        dto.setDescription(course.getDescription());
+        double newPrice=0;
+        double price=course.getPrice();
+        int discount=course.getDiscount();
+        newPrice=price-((price*discount)/100);
+        dto.setPrice(newPrice);
+        dto.setNumOfHours(course.getNumOfHours());
+        dto.setNumOfSessions(course.getNumOfSessions());
+        dto.setNumOfRoom(course.getNumOfRoom());
+        dto.setStartDate(course.getStartDate());
+        dto.setProgress(course.getProgress());
+        dto.setLevel(course.getLevel());
+        dto.setDiscount(course.getDiscount());
+//        dto.setRating(courseRepository.findAverageRatingByCourseId(course.getId()));
+        dto.setImage(courseImageRepository.findByCourseId(course.getId()));
+        List<CourseDayResponse> courseDayDTOs = course.getCourseDayList().stream().map(this::convertToCourseDayDTO).collect(Collectors.toList());
+        dto.setCourseDayList(courseDayDTOs);
+        return dto;
     }
 
+    // Convert CourseDayEntity to CourseDayDTO
+    private CourseDayResponse convertToCourseDayDTO(CourseDayEntity courseDay) {
+        CourseDayResponse dto = new CourseDayResponse();
+        dto.setDay(courseDay.getDay().getDay());
+        dto.setCourseTime(courseDay.isCourseTime() ? "Morning" : "Evening");
+        return dto;
+    }
     // Get favorite courses of a user
-    public List<CourseEntity> getFavoriteCourses(UserEntity user) {
+    public List<CourseResponse> getFavoriteCourses(UserEntity user) {
         List<FavoriteEntity> favoriteCourses = favoriteRepository.findByUser(user);
         List<CourseEntity> courses = new ArrayList<>();
         for (FavoriteEntity favorite : favoriteCourses) {
             courses.add(favorite.getCourse());
         }
-        return courses;
+        return courses.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
 
     //Enroll in a course
@@ -350,5 +387,63 @@ public class UserService {
             return new ResponseEntity<>(response, HttpStatus.UNAUTHORIZED);
         }
     }
+//    public void resetPassword(String token, String newPassword) throws CustomException {
+//        UserEntity user = userRepository.findByPasswordResetToken(token);
+//        if (user == null) {
+//            throw new CustomException("Invalid password reset token", 400);
+//        }
+//        //user.setPassword(passwordEncoder.encode(newPassword));
+//        user.setPasswordResetToken(null); // Clear the token after resetting the password
+//        userRepository.save(user);
+//    }
+//
 
+
+
+    private final Map<String, String> resetCodeStorage = new HashMap<>();
+
+    private String code =generateRandomCode();
+
+    public void initiatePasswordReset(PasswordResetRequest passwordResetRequest) {
+        if(isValidGmail(passwordResetRequest.getEmail()))
+        {emailService.sendPasswordResetEmail(passwordResetRequest.getEmail(), "Milestone Password Reset Code",  code);}
+    }
+
+    public void VerifyAccount(PasswordResetRequest passwordResetRequest) {
+        if(isValidGmail(passwordResetRequest.getEmail()))
+        {emailService.sendPasswordResetEmail(passwordResetRequest.getEmail(), "Milestone Verify Account Code",  code);}
+    }
+
+    public void ActivatedAccount(PasswordResetTokenRequest passwordResetTokenRequest) {
+        UserEntity user = userRepository.findByEmail(passwordResetTokenRequest.getEmail()).get();
+        user.setVerified(true);
+        userRepository.save(user);
+    }
+
+
+
+    public void CheckCode(PasswordResetTokenRequest passwordResetTokenRequest) {
+        String storedCode = code;
+        if (storedCode == null || !storedCode.equals(passwordResetTokenRequest.getCode())) {
+            throw new CustomException("Invalid or expired code", 400);
+        }
+    }
+
+    public boolean isValidGmail(String email) {
+        String regex = "^[a-zA-Z0-9._%+-]+@gmail\\.com$";
+        return email.matches(regex);
+    }
+
+
+    public void changePassword(PasswordResetTokenRequest passwordResetTokenRequest) {
+        UserEntity user = userRepository.findByEmail(passwordResetTokenRequest.getEmail()).get();
+        user.setPassword(passwordResetTokenRequest.getNewPassword());
+        userRepository.save(user);
+    }
+
+    public String generateRandomCode() {
+        SecureRandom random = new SecureRandom();
+         code =String.valueOf(10000 + random.nextInt(90000)) ;
+        return code;
+    }
 }

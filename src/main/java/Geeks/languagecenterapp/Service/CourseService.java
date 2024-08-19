@@ -48,6 +48,8 @@ public class CourseService {
     private CourseImageRepository courseImageRepository;
     @Autowired
     private MarkRepository markRepository;
+    @Autowired
+    private HomeWorkRepository homeWorkRepository;
 
 
     //Add Course by admin and return ok , return bad request response otherwise
@@ -190,6 +192,7 @@ public class CourseService {
         List<CourseEntity> courses = courseRepository.findAll();
         return courses.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
+
     // Get all recent courses
     public List<CourseResponse> getAllRecent() {
         List<CourseEntity> courses = courseRepository.findByOrderByStartDateDesc();
@@ -207,16 +210,17 @@ public class CourseService {
         List<CourseEntity> courses = courseRepository.findTopRatedCourses();
         return courses.stream().map(this::convertToDTO).collect(Collectors.toList());
     }
+
     // Convert CourseEntity to CourseDTO
     private CourseResponse convertToDTO(CourseEntity course) {
         CourseResponse dto = new CourseResponse();
         dto.setId(course.getId());
         dto.setTitle(course.getTitle());
         dto.setDescription(course.getDescription());
-        double newPrice=0;
-        double price=course.getPrice();
-        int discount=course.getDiscount();
-        newPrice=price-((price*discount)/100);
+        double newPrice = 0;
+        double price = course.getPrice();
+        int discount = course.getDiscount();
+        newPrice = price - ((price * discount) / 100);
         dto.setPrice(newPrice);
         dto.setNumOfHours(course.getNumOfHours());
         dto.setNumOfSessions(course.getNumOfSessions());
@@ -225,7 +229,7 @@ public class CourseService {
         dto.setProgress(course.getProgress());
         dto.setLevel(course.getLevel());
         dto.setDiscount(course.getDiscount());
-        dto.setRating(courseRepository.findAverageRatingByCourseId(course.getId()));
+//        dto.setRating(courseRepository.findAverageRatingByCourseId(course.getId()));
         dto.setImage(courseImageRepository.findByCourseId(course.getId()));
         List<CourseDayResponse> courseDayDTOs = course.getCourseDayList().stream().map(this::convertToCourseDayDTO).collect(Collectors.toList());
         dto.setCourseDayList(courseDayDTOs);
@@ -433,12 +437,12 @@ public class CourseService {
 
     }
 
-    public ResponseEntity<?> uploadMarksFile(UploadMarksRequset data) {
+    public ResponseEntity<?> uploadMarksFile(UploadMarksRequest data) {
         //Check User Role
         if (HandleCurrentUserSession.getCurrentUserRole().equals(UserAccountEnum.ADMIN)) {
             MultipartFile marks = data.getMarksFile();
 
-            if (marks.isEmpty()) {
+            if (marks == null || marks.isEmpty()) {
                 return new ResponseEntity<>("Please upload a marks!", HttpStatus.BAD_REQUEST);
             }
 
@@ -450,7 +454,7 @@ public class CourseService {
                 return new ResponseEntity<>("Please upload an Excel File!", HttpStatus.BAD_REQUEST);
             }
 
-            List<String[]> result = MarkService.handleExcelFile(marks);
+            List<Map<String, String>> result = MarkService.handleExcelFile(marks);
             if (result.isEmpty()) {
                 return new ResponseEntity<>("Failed to process the file", HttpStatus.INTERNAL_SERVER_ERROR);
             }
@@ -484,13 +488,17 @@ public class CourseService {
             return new ResponseEntity<>("phone must not be Null", HttpStatus.BAD_REQUEST);
         } else if (role.equals(UserAccountEnum.USER)) {
             if (userRepository.findByPhoneNumber(data.getPhone()).isPresent()) {
-                if (markRepository.findFilesByCourseId(data.getCourseId()).isPresent()) {
-                    String markFilePath = markRepository.findFilesByCourseId(data.getCourseId()).get();
-                    List<String[]> markFile = MarkService.handleExcelFile(MarkService.convertFileToMultipartFile(markFilePath));
-                    List<String[]> result = MarkService.searchInExcelFile(markFile, data.getPhone());
-                    return new ResponseEntity<>(result, HttpStatus.OK);
+                if (enrollCourseRepository.findByUserIdAndCourseId(data.getCourseId(), user.getId()).isPresent()) {
+                    if (markRepository.findFilesByCourseId(data.getCourseId()).isPresent()) {
+                        String markFilePath = markRepository.findFilesByCourseId(data.getCourseId()).get();
+                        List<Map<String, String>> markFile = MarkService.handleExcelFile(MarkService.convertFileToMultipartFile(markFilePath));
+                        Map<String, String> result = MarkService.searchInExcelFile(markFile, data.getPhone());
+                        return new ResponseEntity<>(result, HttpStatus.OK);
+                    } else {
+                        return new ResponseEntity<>("Course With this Id Not Found Or Mark File Not Uploaded Yet", HttpStatus.BAD_REQUEST);
+                    }
                 } else {
-                    return new ResponseEntity<>("Course With this Id Not Found Or Mark File Not Uploaded Yet", HttpStatus.BAD_REQUEST);
+                    return new ResponseEntity<>("User Not Enroll In This Course", HttpStatus.FORBIDDEN);
                 }
             } else {
                 return new ResponseEntity<>("Student With this Phone Not Found", HttpStatus.BAD_REQUEST);
@@ -500,8 +508,8 @@ public class CourseService {
         }
     }
 
-    public ResponseEntity<?> addDiscount(DiscountRequest body ,int id) {
-        Map <String,String> response = new HashMap<>();
+    public ResponseEntity<?> addDiscount(DiscountRequest body, int id) {
+        Map<String, String> response = new HashMap<>();
 
         Optional<CourseEntity> course = courseRepository.findById(id);
         if (course.isPresent()) {
@@ -509,14 +517,116 @@ public class CourseService {
             courseRepository.save(course.get());
 
             // Create a response object with the success message
-            response.put("message","Discount added to the course successfully.");
+            response.put("message", "Discount added to the course successfully.");
             return new ResponseEntity<>(response, HttpStatus.OK);
-        }
-        else {
+        } else {
             // Create a response object with the success message
-            response.put("message","Course Not Found.");
+            response.put("message", "Course Not Found.");
             return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
         }
 
     }
+
+    public ResponseEntity<?> UploadHomeworkFile(UploadHomeworkRequest data) {
+        UserEntity currentUser = HandleCurrentUserSession.getCurrentUser();
+        if (currentUser.getAccountType().equals(UserAccountEnum.ADMIN) || currentUser.getAccountType().equals(UserAccountEnum.TEACHER)) {
+            MultipartFile file = data.getHomeworkFile();
+            if (file == null || file.isEmpty()) {
+                return new ResponseEntity<>("Please upload a HomeWork File!", HttpStatus.BAD_REQUEST);
+            }
+            if (courseRepository.findById(data.getCourseId()).isEmpty()) {
+                return new ResponseEntity<>("Course With this Id Not Found", HttpStatus.BAD_REQUEST);
+            }
+            // Upload File To Server
+            String resultPath = FilesManagement.uploadSingleFile(file);
+            if (resultPath != null) {
+                // Initialize Homework Object
+                HomeWorkEntity homeWorkEntity = new HomeWorkEntity();
+                homeWorkEntity.setUser(HandleCurrentUserSession.getCurrentUser());
+                homeWorkEntity.setCourse(CourseEntity.builder().id(data.getCourseId()).build());
+                homeWorkEntity.setMedia(resultPath);
+                homeWorkEntity.setDate(data.getDate());
+                homeWorkEntity.setDescription(data.getDescription());
+                // Save File In DataBase
+                homeWorkRepository.save(homeWorkEntity);
+                return new ResponseEntity<>("Homework Successfully Uploaded", HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("Something Went Wrong .. try again later", HttpStatus.UNAUTHORIZED);
+            }
+        } else {
+            return new ResponseEntity<>("Only Teachers And Admins Can Upload Homeworks", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    public ResponseEntity<?> getCourseHomeworkFile(int id) {
+        // Check If The Course Exist
+        if (courseRepository.findById(id).isEmpty()) {
+            return new ResponseEntity<>("Course With this Id Not Found", HttpStatus.NOT_FOUND);
+        }
+        // Get Current User
+        UserEntity currentUser = HandleCurrentUserSession.getCurrentUser();
+        //Check If User Exist
+        if (userRepository.findByPhoneNumber(currentUser.getPhoneNumber()).isPresent()) {
+            return new ResponseEntity<>("Student With this Phone Not Found", HttpStatus.BAD_REQUEST);
+        }
+        // Check If This User Enroll In This Course
+        if (enrollCourseRepository.findByUserIdAndCourseId(id, currentUser.getId()).isPresent()) {
+            List<HomeWorkEntity> homeworks = homeWorkRepository.getByCourseId(id);
+            if (homeworks.isEmpty()) {
+                return new ResponseEntity<>("No Homeworks For This Course Yet", HttpStatus.NO_CONTENT);
+            } else {
+                return new ResponseEntity<>(homeworks, HttpStatus.OK);
+            }
+        } else {
+            return new ResponseEntity<>("User Not Enroll In This Course", HttpStatus.FORBIDDEN);
+        }
+    }
+
+    public ResponseEntity<?> getCoursesWithStudentsForTeacher() {
+        UserEntity currentUser = HandleCurrentUserSession.getCurrentUser();
+
+        if (currentUser.getAccountType().equals(UserAccountEnum.TEACHER) || currentUser.getAccountType().equals(UserAccountEnum.ADMIN)) {
+            List<CourseEntity> teacherCourses = courseRepository.findByUserId(currentUser.getId());
+            if (!teacherCourses.isEmpty()) {
+                List<Object> result = new ArrayList<>();
+                for (CourseEntity course : teacherCourses) {
+                    Map<String, Object> storage = new HashMap<>();
+                    storage.put("course", course);
+                    List<EnrollCourseEntity> enrolledStudents = enrollCourseRepository.findByCourseId(course.getId());
+                    if (!enrolledStudents.isEmpty()) {
+                        List<UserEntity> students = new ArrayList<>();
+                        for (EnrollCourseEntity element : enrolledStudents) {
+                            students.add(convertToValidObject(userRepository.findById(element.getUser().getId()).get()));
+                        }
+                        storage.put("students", students);
+                    } else {
+                        storage.put("students", new ArrayList<>());
+                    }
+                    result.add(storage);
+                }
+                return new ResponseEntity<>(result, HttpStatus.OK);
+            } else {
+                return new ResponseEntity<>("This Teacher Do not Have Any Course Yet", HttpStatus.NO_CONTENT);
+            }
+        } else {
+            return new ResponseEntity<>("Only For Teacher And Admin", HttpStatus.UNAUTHORIZED);
+        }
+    }
+
+    private UserEntity convertToValidObject(UserEntity userData) {
+        UserEntity user = new UserEntity();
+        // Initialize Object
+        user.setId(userData.getId());
+        user.setFirstName(userData.getFirstName());
+        user.setLastName(userData.getLastName());
+        user.setEmail(userData.getEmail());
+        user.setBio(userData.getBio());
+        user.setDob(userData.getDob());
+        user.setAccountType(userData.getAccountType());
+        user.setGender(userData.getGender());
+        user.setPhoneNumber(userData.getPhoneNumber());
+        user.setEducation(userData.getEducation());
+        return user;
+    }
+
 }
